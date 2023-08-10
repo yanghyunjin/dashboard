@@ -5,6 +5,9 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { resolve } from "path";
 
+const imgLink = "http://localhost";
+const imgPORT = 3000;
+
 interface RichTextEditorProps {
   value: string;
   onChange: (content: string) => void;
@@ -16,7 +19,6 @@ interface UploadResponse {
 const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
   const editorRef = useRef<any>(null);
   const [editorData, setEditorData] = useState("");
-  const imgLink = "http://localhost:3000/";
 
   useEffect(() => {
     // When the editor is ready, set the initial content
@@ -56,7 +58,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
               })
               .then((res: UploadResponse) => {
                 resolve({
-                  default: `${imgLink}/${res.fileUrl}`,
+                  default: `${imgLink}:${imgPORT}/${res.fileUrl}`,
                 });
               })
               .catch((err) => reject(err));

@@ -8,6 +8,8 @@ import { getLoginStatus, removeLoginStatus } from "../utils/cookieHelper";
 import DashboardCard from "../components/DashboardCard";
 import BoardTab from "../components/BoardTab";
 import React from "react";
+const DOMAIN = "http://localhost";
+const PORT = 3000;
 
 interface Props {
   posts: Post[];
@@ -47,8 +49,9 @@ const Home = ({ posts }: Props) => {
   );
 
   async function fetchPlayingTime() {
+    console.log("fetchPlayingTime");
     try {
-      const response = await fetch("http://localhost:3000/api/playingtime");
+      const response = await fetch(DOMAIN + ":" + PORT + "/api/playingtime");
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -73,6 +76,7 @@ const Home = ({ posts }: Props) => {
     setEcoContent(tempEco);
     const tempQna = posts.filter((item) => item.type === 1);
     setQnaContent(tempQna);
+    fetchPlayingTime();
 
     setInterval(fetchPlayingTime, 10000);
   }, []); // Empty dependency array ensures this effect runs only once, on the client-side
@@ -103,7 +107,7 @@ const Home = ({ posts }: Props) => {
       }
       setSelectedBoardId(null);
       alert("게시글이 삭제되었습니다.");
-      const res = await fetch("http://localhost:3000/api/posts");
+      const res = await fetch(DOMAIN + ":" + PORT + "/api/posts");
       const posts = await res.json();
       const tempEco = posts.filter((item: any) => item.type === 0);
       setEcoContent(tempEco);
@@ -270,7 +274,7 @@ const Home = ({ posts }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch("http://localhost:3000/api/posts");
+  const res = await fetch(DOMAIN + ":" + PORT + "/api/posts");
   const posts = await res.json();
 
   return {
