@@ -10,13 +10,17 @@ export function setLoginStatus(value: string, days: number = 7) {
 }
 
 export function getLoginStatus(): string | null {
-  const cookies = document.cookie.split(";").map((cookie) => cookie.trim());
-  for (const cookie of cookies) {
-    const [name, value] = cookie.split("=");
-    if (name === LOGIN_COOKIE_KEY) {
-      return value;
+  if (typeof document !== "undefined") {
+    const cookies = document.cookie.split(";").map((cookie) => cookie.trim());
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split("=");
+      if (name === LOGIN_COOKIE_KEY) {
+        return value;
+      }
     }
+    return null;
   }
+
   return null;
 }
 

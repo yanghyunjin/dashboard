@@ -3,10 +3,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { resolve } from "path";
 
-const imgLink = "http://localhost";
-const imgPORT = 3000;
+const DOMIAN = "http://localhost:3000";
 
 interface RichTextEditorProps {
   value: string;
@@ -58,7 +56,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
               })
               .then((res: UploadResponse) => {
                 resolve({
-                  default: `${imgLink}:${imgPORT}/${res.fileUrl}`,
+                  default: `${DOMIAN}/${res.fileUrl}`,
                 });
               })
               .catch((err) => reject(err));

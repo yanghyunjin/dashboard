@@ -8,8 +8,8 @@ import { getLoginStatus, removeLoginStatus } from "../utils/cookieHelper";
 import DashboardCard from "../components/DashboardCard";
 import BoardTab from "../components/BoardTab";
 import React from "react";
-const DOMAIN = "http://localhost";
-const PORT = 3000;
+
+const DOMAIN = "http://localhost:3000";
 
 interface Props {
   posts: Post[];
@@ -49,9 +49,8 @@ const Home = ({ posts }: Props) => {
   );
 
   async function fetchPlayingTime() {
-    console.log("fetchPlayingTime");
     try {
-      const response = await fetch(DOMAIN + ":" + PORT + "/api/playingtime");
+      const response = await fetch(DOMAIN + "/api/playingtime");
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -73,9 +72,9 @@ const Home = ({ posts }: Props) => {
       setIsLoggedIn(false);
     }
     const tempEco = posts.filter((item) => item.type === 0);
-    setEcoContent(tempEco);
+    setEcoContent(tempEco.sort((a, b) => a.id! - b.id!));
     const tempQna = posts.filter((item) => item.type === 1);
-    setQnaContent(tempQna);
+    setQnaContent(tempQna.sort((a, b) => a.id! - b.id!));
     fetchPlayingTime();
 
     setInterval(fetchPlayingTime, 10000);
@@ -107,7 +106,7 @@ const Home = ({ posts }: Props) => {
       }
       setSelectedBoardId(null);
       alert("게시글이 삭제되었습니다.");
-      const res = await fetch(DOMAIN + ":" + PORT + "/api/posts");
+      const res = await fetch(DOMAIN + "/api/posts");
       const posts = await res.json();
       const tempEco = posts.filter((item: any) => item.type === 0);
       setEcoContent(tempEco);
@@ -181,8 +180,8 @@ const Home = ({ posts }: Props) => {
               <tbody>
                 {displayedBoardData
                   .filter((item) => item.id !== undefined)
-                  .sort((a, b) => a.id! - b.id!)
                   .map((item) => {
+                    console.log(item.id);
                     const date = new Date(
                       item.created_at ? item.created_at : ""
                     );
@@ -274,7 +273,7 @@ const Home = ({ posts }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(DOMAIN + ":" + PORT + "/api/posts");
+  const res = await fetch(DOMAIN + "/api/posts");
   const posts = await res.json();
 
   return {

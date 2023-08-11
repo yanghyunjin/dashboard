@@ -5,7 +5,11 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { getLoginStatus } from "../utils/cookieHelper";
 import styles from "../styles/write.module.css";
-import RichTextEditor from "../components/RichTextEditor";
+import dynamic from "next/dynamic";
+
+const RichTextEditor = dynamic(() => import("../components/RichTextEditor"), {
+  ssr: false,
+});
 
 const Write = () => {
   // Check if the user is logged in
@@ -63,47 +67,48 @@ const Write = () => {
         </main>
       </div>
     );
-  }
+  } else {
+    return (
+      <div className={styles.container}>
+        <Head>
+          <title>글쓰기</title>
+        </Head>
+        <div className={styles.header}>
+          <h1>글쓰기</h1>
+        </div>
 
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>글쓰기</title>
-      </Head>
-      <div className={styles.header}>
-        <h1>글쓰기</h1>
+        <form onSubmit={handleSubmit} className={styles["form-container"]}>
+          <div>
+            <label htmlFor="title">제목</label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="type">유형</label>
+            <select
+              id="type"
+              value={postType}
+              onChange={(e) => setPostType(Number(e.target.value))}
+            >
+              <option value={0}>생태도감</option>
+              <option value={1}>QnA</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="content">내용</label>
+            {/* Use the RichTextEditor component here */}
+
+            <RichTextEditor value={""} onChange={setContent} />
+          </div>
+          <button type="submit">작성 완료</button>
+        </form>
       </div>
-
-      <form onSubmit={handleSubmit} className={styles["form-container"]}>
-        <div>
-          <label htmlFor="title">제목</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="type">유형</label>
-          <select
-            id="type"
-            value={postType}
-            onChange={(e) => setPostType(Number(e.target.value))}
-          >
-            <option value={0}>생태도감</option>
-            <option value={1}>QnA</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="content">내용</label>
-          {/* Use the RichTextEditor component here */}
-          <RichTextEditor value={""} onChange={setContent} />
-        </div>
-        <button type="submit">작성 완료</button>
-      </form>
-    </div>
-  );
+    );
+  }
 };
 
 export default Write;

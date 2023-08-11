@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getLoginStatus } from "../../utils/cookieHelper";
 import styles from "../../styles/write.module.css";
-import RichTextEditor from "../../components/RichTextEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(
+  () => import("../../components/RichTextEditor"),
+  {
+    ssr: false,
+  }
+);
 
 const Update = () => {
   // Check if the user is logged in
