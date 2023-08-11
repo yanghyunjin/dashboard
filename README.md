@@ -13,7 +13,7 @@ In order to execute this project you must have:
 
 ```
 git clone https://github.com/yanghyunjin/dashboard.git
-cd nextjs-postgres-crud-typescript
+cd dashboard
 npm install
 npm run dev
 ```
