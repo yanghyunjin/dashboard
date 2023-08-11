@@ -72,9 +72,9 @@ const Home = ({ posts }: Props) => {
       setIsLoggedIn(false);
     }
     const tempEco = posts.filter((item) => item.type === 0);
-    setEcoContent(tempEco.sort((a, b) => a.id! - b.id!));
+    setEcoContent(tempEco.sort((a, b) => b.id! - a.id!));
     const tempQna = posts.filter((item) => item.type === 1);
-    setQnaContent(tempQna.sort((a, b) => a.id! - b.id!));
+    setQnaContent(tempQna.sort((a, b) => b.id! - a.id!));
     fetchPlayingTime();
 
     setInterval(fetchPlayingTime, 10000);
