@@ -4,11 +4,11 @@ let conn: any;
 
 if (!conn) {
   conn = new Pool({
-    user: "root",
-    password: "root",
+    user: "postres",
+    password: "postres",
     host: "localhost",
     port: 5432,
-    database: "root",
+    database: "postres",
   });
 }
 
