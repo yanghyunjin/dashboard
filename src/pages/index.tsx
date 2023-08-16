@@ -9,7 +9,10 @@ import DashboardCard from "../components/DashboardCard";
 import BoardTab from "../components/BoardTab";
 import React from "react";
 
-const DOMAIN = "http://localhost:3000";
+let DOMAIN = `http://localhost:3000`;
+if(typeof window !== "undefined"){
+  DOMAIN = `http://${window.location.hostname}:${window.location.port}`;
+}
 
 interface Props {
   posts: Post[];
@@ -65,6 +68,7 @@ const Home = ({ posts }: Props) => {
 
   useEffect(() => {
     // This effect will run on the client-side to check the user's login status
+    
     const savedLoginStatus = getLoginStatus();
     if (savedLoginStatus === "loggedIn") {
       setIsLoggedIn(true);
