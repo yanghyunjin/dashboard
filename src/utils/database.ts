@@ -5,7 +5,7 @@ let conn: any;
 if (!conn) {
   conn = new Pool({
     user: "postres",
-    password: "postres",
+    password: "mysecretpassword",
     host: "localhost",
     port: 5432,
     database: "postres",
