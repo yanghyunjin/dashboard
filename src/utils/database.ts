@@ -4,8 +4,8 @@ let conn: any;
 
 if (!conn) {
   conn = new Pool({
-    user: "dashboard",
-    password: "password",
+    user: "postgres",
+    password: "postgresql",
     host: "localhost",
     port: 5432,
     database: "tasksdb",
