@@ -4,7 +4,11 @@ import React, { useRef, useEffect, useState } from "react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
-const DOMIAN = "http://localhost:3000";
+let DOMAIN = `http://localhost:3000`;
+if(typeof window !== "undefined"){
+  DOMAIN = `http://${window.location.hostname}:${window.location.port}`;
+}
+
 
 interface RichTextEditorProps {
   value: string;
