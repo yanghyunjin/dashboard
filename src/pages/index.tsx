@@ -75,6 +75,7 @@ const Home = ({ posts }: Props) => {
     } else {
       setIsLoggedIn(false);
     }
+    console.log(posts);
     const tempEco = posts.filter((item) => item.type === 0);
     setEcoContent(tempEco.sort((a, b) => b.id! - a.id!));
     const tempQna = posts.filter((item) => item.type === 1);
@@ -279,7 +280,7 @@ const Home = ({ posts }: Props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(DOMAIN + "/api/posts");
   const posts = await res.json();
-
+  console.log(posts);
   return {
     props: { posts },
   };
