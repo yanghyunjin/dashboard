@@ -60,7 +60,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
               })
               .then((res: UploadResponse) => {
                 resolve({
-                  default: `${DOMIAN}/${res.fileUrl}`,
+                  default: `${DOMAIN}/${res.fileUrl}`,
                 });
               })
               .catch((err) => reject(err));
