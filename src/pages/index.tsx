@@ -10,9 +10,6 @@ import BoardTab from "../components/BoardTab";
 import React from "react";
 
 let DOMAIN = `http://localhost:3000`;
-if(typeof window !== "undefined"){
-  DOMAIN = `http://${window.location.hostname}:${window.location.port}`;
-}
 
 interface Props {
   posts: Post[];
@@ -41,7 +38,9 @@ const Home = ({ posts }: Props) => {
       ? ecoContent
       : activeTab === "질문과 답변"
       ? qnaContent
-      : [];
+      : activeTab === "대시보드"
+      ? "dashboard"
+      :[];
 
   // Get the items to display on the current page
   const displayedBoardData = currentContent.slice(startIndex, endIndex);
@@ -68,14 +67,16 @@ const Home = ({ posts }: Props) => {
 
   useEffect(() => {
     // This effect will run on the client-side to check the user's login status
-    
+    if(typeof window !== "undefined"){
+      DOMAIN = `http://${window.location.hostname}:${window.location.port}`;
+    }
     const savedLoginStatus = getLoginStatus();
     if (savedLoginStatus === "loggedIn") {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-    console.log(posts);
+
     const tempEco = posts.filter((item) => item.type === 0);
     setEcoContent(tempEco.sort((a, b) => b.id! - a.id!));
     const tempQna = posts.filter((item) => item.type === 1);
@@ -140,19 +141,7 @@ const Home = ({ posts }: Props) => {
         </div>
       </header>
       <main>
-        <div className="dashboard-container">
-          <DashboardCard title="누적 이용자수" valueInSeconds={totalUsers} />
-          <DashboardCard
-            title="총 이용시간"
-            valueInSeconds={totalUsageTime}
-            displayAsTime
-          />
-          <DashboardCard
-            title="평균 이용시간"
-            valueInSeconds={averageUsageTime}
-            displayAsTime
-          />
-        </div>
+        
         <div className="board-tabs">
           <BoardTab
             title="생태도감"
@@ -165,13 +154,34 @@ const Home = ({ posts }: Props) => {
             onClick={() => handleTabClick("질문과 답변")}
           />
           {isLoggedIn && (
+          <BoardTab
+            title="대시보드"
+            active={activeTab === "대시보드"}
+            onClick={() => handleTabClick("대시보드")}
+          />)}
+          {isLoggedIn && (
             <Link href="/write">
               <a className="writeButton">글쓰기</a>
             </Link>
           )}
         </div>
         {/* Board Contents */}
-        {currentContent.length > 0 ? (
+        {currentContent === "dashboard"? 
+        (<div className="dashboard-container">
+        <DashboardCard title="누적 이용자수" valueInSeconds={totalUsers} />
+        <DashboardCard
+          title="총 이용시간"
+          valueInSeconds={totalUsageTime}
+          displayAsTime
+        />
+        <DashboardCard
+          title="평균 이용시간"
+          valueInSeconds={averageUsageTime}
+          displayAsTime
+        />
+      </div>)
+        :
+        currentContent.length > 0 ? (
           <>
             <table className="board-table">
               <thead>
@@ -183,10 +193,9 @@ const Home = ({ posts }: Props) => {
                 </tr>
               </thead>
               <tbody>
-                {displayedBoardData
-                  .filter((item) => item.id !== undefined)
-                  .map((item) => {
-                    console.log(item.id);
+                {//@ts-ignore
+                displayedBoardData.filter((item:any) => item.id !== undefined)
+                  .map((item:any) => {
                     const date = new Date(
                       item.created_at ? item.created_at : ""
                     );
@@ -278,9 +287,11 @@ const Home = ({ posts }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  if(typeof window !== "undefined"){
+    DOMAIN = `http://${window.location.hostname}:${window.location.port}`;
+  }
   const res = await fetch(DOMAIN + "/api/posts");
   const posts = await res.json();
-  console.log(posts);
   return {
     props: { posts },
   };

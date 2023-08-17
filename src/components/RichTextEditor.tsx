@@ -5,9 +5,6 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 let DOMAIN = `http://localhost:3000`;
-if(typeof window !== "undefined"){
-  DOMAIN = `http://${window.location.hostname}:${window.location.port}`;
-}
 
 
 interface RichTextEditorProps {
@@ -24,6 +21,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
 
   useEffect(() => {
     // When the editor is ready, set the initial content
+    if(typeof window !== "undefined"){
+      DOMAIN = `http://${window.location.hostname}:${window.location.port}`;
+    }
     if (editorRef.current && value) {
       editorRef.current.setData(value);
     }

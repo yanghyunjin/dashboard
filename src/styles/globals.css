@@ -36,6 +36,7 @@ a {
 .dashboard-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  padding-top:30px;
   gap: 20px;
 }
 
